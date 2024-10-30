@@ -2,21 +2,27 @@
 import pool from '../../lib/db';
 
 export default async function handler(req, res) {
-  try {
-    // Generar un valor de humedad aleatorio entre 0 y 100
-    const humedad = (Math.random() * 100).toFixed(2);
+  // Verificar si se ha iniciado un intervalo para evitar duplicados
+  if (!global.intervalStarted) {
+    global.intervalStarted = true;
 
-    // Insertar el valor en la base de datos
-    const queryText = `
-      INSERT INTO humidity_data (humedad) VALUES ($1)
-    `;
+    setInterval(async () => {
+      try {
+        // Generar un valor de humedad aleatorio entre 0 y 100
+        const humedad = (Math.random() * 100).toFixed(2);
 
-    await pool.query(queryText, [humedad]);
+        // Insertar el valor en la base de datos
+        const queryText = `
+          INSERT INTO humidity_data (humedad) VALUES ($1)
+        `;
 
-    res.status(200).json({ message: 'Dato aleatorio agregado correctamente', humedad });
-  } catch (error) {
-    console.error('Error al agregar dato:', error);
-    res.status(500).json({ error: 'Error al agregar dato' });
+        await pool.query(queryText, [humedad]);
+        console.log(`Dato aleatorio agregado: ${humedad}`);
+      } catch (error) {
+        console.error('Error al agregar dato:', error);
+      }
+    }, 15000); // Intervalo de 15 segundos
   }
-}
 
+  res.status(200).json({ message: 'Iniciado el envío de datos cada 15 segundos' });
+}
