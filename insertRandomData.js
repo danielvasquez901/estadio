@@ -1,7 +1,6 @@
-// insertRandomData.js
-import pool from './lib/db.js';
+import 'dotenv/config'; // Asegúrate de cargar las variables de entorno
+import pool from './lib/db.js'; // Asegúrate de que la ruta a `db.js` sea correcta
 
-// Función para insertar datos aleatorios en la base de datos
 async function insertRandomData() {
   try {
     const humedad = (Math.random() * 100).toFixed(2);
