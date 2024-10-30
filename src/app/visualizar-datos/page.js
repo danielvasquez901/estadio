@@ -1,4 +1,6 @@
 // src/app/visualizar-datos/page.js
+"use client"; // Agrega esta línea al inicio del archivo
+
 import { useEffect, useState } from "react";
 
 export default function VisualizarDatos() {
